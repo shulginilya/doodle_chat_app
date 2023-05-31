@@ -1,6 +1,8 @@
+import styles from './header.module.scss';
+
 const Header: React.FC = () => {
 	return (
-        <div>header</div>
+        <header data-testid="header" className={styles.header}>Doodle Chat App</header>
 	);
 };
 

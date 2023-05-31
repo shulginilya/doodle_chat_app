@@ -1,0 +1,10 @@
+@use '@styles/variables' as *;
+
+.chat_container {
+    display: flex;
+    padding: 60px $chat_window_horizontal_padding_mobile;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    background-color: $white;
+}
