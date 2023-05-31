@@ -1,0 +1,60 @@
+@use '@/styles/variables' as *;
+
+@mixin message-input-typography {
+    color: $grey;
+    opacity: 1;
+}
+
+.message_send_form_wrap {
+    position: absolute;
+    bottom: 0;
+    padding: 0 $footer_header_horizontal_padding_mobile;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $base-blue;
+    height: $footer_header_height;
+    width: 100%;
+    color: $white;
+} 
+.message_send_form {
+    display: flex;
+    &__input {
+        position: relative;
+        width: 200px;
+        margin-right: 8px;
+        &::before {
+            content: "";
+            position: absolute;
+            top: 10px;
+            left: 8px;
+            height: 20px;
+            width: 2px;
+            background-color: $dark-blue;
+        }
+        &__field {
+            border-radius: 4px;
+            border: solid 2px $dark-blue;
+            height: 40px;
+            @include message-input-typography();
+            padding: 0 10px 0 12px;
+            width: 100%;
+            &:focus {
+                outline: none;
+                box-shadow: none;
+            }
+            &::placeholder {
+                @include message-input-typography();
+            }
+        }
+    }
+    &__btn {
+        height: 40px;
+        border: none;
+        border-radius: 4px;
+        width: 60px;
+        background-color: $orange;
+        color: $white;
+        cursor: pointer;
+    }
+}
