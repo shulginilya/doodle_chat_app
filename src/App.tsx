@@ -1,6 +1,6 @@
-import Header from '@components/Header';
-import Footer from '@components/Footer';
-import ChatContainer from '@containers/ChatContainer';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import ChatContainer from '@/containers/ChatContainer';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 const App = () => (
