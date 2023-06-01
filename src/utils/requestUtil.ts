@@ -2,7 +2,9 @@ import { commonConfig } from '@/configs/common';
 
 interface MakeRequestType {
     url: string;
-    params?: any;
+    params?: {
+        [key: string]: string
+    };
     method?: 'GET' | 'PUT' | 'DELETE' | 'POST';
 };
 
@@ -23,12 +25,21 @@ export const makeRequest = async ({
         method,
         headers: {
             "Content-Type": "application/json",
+            "token": commonConfig.token
         }
     };
     if (params) {
         options['body'] = JSON.stringify(params);
     }
-    const response = await fetch(`${commonConfig.apiEndpoint}/${url}`, options);
+    let apiUrl = `${commonConfig.apiEndpoint}${url}`;
+    if (method === 'GET') {
+        if (url === '') {
+            apiUrl = `${commonConfig.apiEndpoint}?token=${commonConfig.token}`;
+        } else {
+            apiUrl = `${commonConfig.apiEndpoint}${url}&token=${commonConfig.token}`;
+        }
+    }
+    const response = await fetch(apiUrl, options);
     const data = await response.json();
     return data;
 };

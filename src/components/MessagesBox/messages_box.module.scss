@@ -2,21 +2,11 @@
 
 .messages_box {
     display: flex;
-    flex-direction: column;
-    &__wrap {
-        display: flex;
-        width: 100%;
-        justify-content: flex-start;
-        margin-bottom: 16px;
-        &:last-child {
-            margin-bottom: 0;
-        }
-    }
-    &__wrap__current_user {
-        justify-content: flex-end;
-        .messages_box__item {
-            background-color: $yellow;
-        }
+    width: 100%;
+    justify-content: flex-start;
+    margin-bottom: 16px;
+    &:last-child {
+        margin-bottom: 0;
     }
     &__item {
         border-radius: 4px;
@@ -32,6 +22,12 @@
         }
         &__text {
             font-weight: bold;
+        }
+    }
+    &__current_user {
+        justify-content: flex-end;
+        .messages_box__item {
+            background-color: $yellow;
         }
     }
 }

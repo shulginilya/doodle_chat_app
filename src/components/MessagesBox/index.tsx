@@ -1,21 +1,27 @@
+import { timestampToDate } from '@/utils/commonUtils';
+import { MessageItemType } from '@/types';
 import styles from './messages_box.module.scss';
 
-const MessagesBox: React.FC = () => {
+interface MessagesBoxType {
+    messageData: MessageItemType;
+    isCurrentUser?: boolean;
+};
+
+const MessagesBox: React.FC<MessagesBoxType> = ({
+    messageData,
+    isCurrentUser = false
+}) => {
+    const messageBoxClass = isCurrentUser ? `${styles.messages_box} ${styles.messages_box__current_user}` : styles.messages_box;
 	return (
-		<div data-testid="messages_box" className={styles.messages_box}>
-            {/* message UI samples */}
-            <div className={styles.messages_box__wrap}>
-                <div className={styles.messages_box__item}>
-                    <p className={`${styles.messages_box__item__line} ${styles.messages_box__item__name}`}>Patricia</p>
-                    <p className={`${styles.messages_box__item__line} ${styles.messages_box__item__text}`}>Sounds good to me</p>
-                    <p className={`${styles.messages_box__item__line} ${styles.messages_box__item__date}`}>10 Mar 2018 10:22</p>
-                </div>
-            </div>
-            <div className={`${styles.messages_box__wrap} ${styles.messages_box__wrap__current_user}`}>
-                <div className={`${styles.messages_box__item}`}>
-                    <p className={`${styles.messages_box__item__line} ${styles.messages_box__item__text}`}>Sounds good to me</p>
-                    <p className={`${styles.messages_box__item__line} ${styles.messages_box__item__date}`}>10 Mar 2018 10:22</p>
-                </div>
+		<div data-testid="messages_box" className={messageBoxClass}>
+            <div className={styles.messages_box__item}>
+                {
+                    !isCurrentUser && (
+                        <p className={`${styles.messages_box__item__line} ${styles.messages_box__item__name}`}>{messageData.author}</p>
+                    )
+                }
+                <p className={`${styles.messages_box__item__line} ${styles.messages_box__item__text}`}>{messageData.message}</p>
+                <p className={`${styles.messages_box__item__line} ${styles.messages_box__item__date}`}>{timestampToDate(messageData.timestamp)}</p>
             </div>
 		</div>
 	);

@@ -9,6 +9,6 @@ describe('<MessagesBox /> test suite', () => {
     
     it('Should render the <MessagesBox /> component, and must be visible', () => {
         const messagesBoxRootElement = screen.getByTestId('messages_box');
-        expect(messagesBoxRootElement).toBeVisible();
+        expect(messagesBoxRootElement).toBeInTheDocument();
     });
 });

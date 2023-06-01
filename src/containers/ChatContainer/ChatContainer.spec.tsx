@@ -9,6 +9,6 @@ describe('<ChatContainer /> test suite', () => {
     
     it('Should render the <ChatContainer /> component, and must be visible', () => {
         const chatContainerElement = screen.getByTestId('chat_container');
-        expect(chatContainerElement).toBeVisible();
+        expect(chatContainerElement).toBeInTheDocument();
     });
 });

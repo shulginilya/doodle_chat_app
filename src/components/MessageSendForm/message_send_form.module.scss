@@ -43,7 +43,7 @@
             @include message-input-typography();
             padding: 0 10px 0 12px;
             width: 100%;
-            &:focus {
+            &:focus, &:active {
                 outline: none;
                 box-shadow: none;
             }

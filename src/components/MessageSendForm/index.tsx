@@ -1,12 +1,19 @@
 import { useState } from 'react';
 import styles from './message_send_form.module.scss';
 
-const MessageSendForm: React.FC = () => {
+interface MessageSendFormType {
+    onMessageAdd: (str: string) => void;
+};
+
+const MessageSendForm: React.FC<MessageSendFormType> = ({
+    onMessageAdd
+}) => {
     const [message, setMessage] = useState('');
 
-    const submit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const submit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log('hey: ', message);
+        setMessage('');
+        onMessageAdd(message);
     };
 
     const updateMessageForm = (event: React.SyntheticEvent) => {
@@ -27,6 +34,7 @@ const MessageSendForm: React.FC = () => {
                         <input
                             type='text'
                             placeholder='Message'
+                            value={message}
                             className={styles.message_send_form__input__field}
                             data-testid="message_form_text_input"
                             onChange={(e) => updateMessageForm(e)}
