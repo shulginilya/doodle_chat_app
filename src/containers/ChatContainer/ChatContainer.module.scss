@@ -11,6 +11,7 @@
     &__inside {
         width: $fixed_chat_width;
         height: 100%;
+        overflow: auto;
         @media (min-width: $min-screen-md) {
             width: $max_chat_width;
         }

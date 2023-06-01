@@ -5,12 +5,12 @@ interface MakeRequestType {
     params?: {
         [key: string]: string
     };
-    method?: 'GET' | 'PUT' | 'DELETE' | 'POST';
+    method?: 'GET' | 'POST';
 };
 
 interface OptionsType {
-    method: 'GET' | 'PUT' | 'DELETE' | 'POST';
-    headers: {
+    method: 'GET' | 'POST';
+    headers?: {
         [key: string]: string
     },
     body?: string;
@@ -22,12 +22,14 @@ export const makeRequest = async ({
     method = 'GET'
 }: MakeRequestType) => {
     const options: OptionsType = {
-        method,
-        headers: {
+        method
+    };
+    if (method === 'POST') {
+        options.headers = {
             "Content-Type": "application/json",
             "token": commonConfig.token
-        }
-    };
+        };
+    }
     if (params) {
         options['body'] = JSON.stringify(params);
     }
