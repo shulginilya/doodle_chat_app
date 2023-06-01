@@ -1,0 +1,37 @@
+@use '@/styles/variables' as *;
+
+.messages_box {
+    display: flex;
+    flex-direction: column;
+    &__wrap {
+        display: flex;
+        width: 100%;
+        justify-content: flex-start;
+        margin-bottom: 16px;
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+    &__wrap__current_user {
+        justify-content: flex-end;
+        .messages_box__item {
+            background-color: $yellow;
+        }
+    }
+    &__item {
+        border-radius: 4px;
+        border: solid 1px $grey;
+        background-color: $white;
+        max-width: 47%;
+        padding: 16px;
+        &__line {
+            margin: 0;
+        }
+        &__name, &__date {
+            color: $grey;
+        }
+        &__text {
+            font-weight: bold;
+        }
+    }
+}

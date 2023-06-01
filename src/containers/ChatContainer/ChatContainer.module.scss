@@ -2,9 +2,17 @@
 
 .chat_container {
     display: flex;
-    padding: 60px $chat_window_horizontal_padding_mobile;
-    display: flex;
+    justify-content: center;
+    padding: calc($footer_header_height + 16px) 8px;
+    background-color: $white;
     height: 100%;
     width: 100%;
-    background-color: $white;
+    background-image: url('../../assets/body_bg.png');
+    &__inside {
+        width: $fixed_chat_width;
+        height: 100%;
+        @media (min-width: $min-screen-md) {
+            width: $max_chat_width;
+        }
+    }
 }
