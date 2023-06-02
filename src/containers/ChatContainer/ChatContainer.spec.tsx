@@ -2,9 +2,9 @@ import { render, screen } from '@testing-library/react';
 
 import ChatContainer from './index';
 
-describe('<ChatContainer /> test suite', () => {
-    // beforeAll(() => jest.spyOn(window, 'fetch'));
+global.fetch = require('jest-fetch-mock');
 
+describe('<ChatContainer /> test suite', () => {
     beforeEach(() => {
         render(<ChatContainer />);
     });

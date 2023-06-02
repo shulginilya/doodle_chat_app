@@ -42,6 +42,9 @@ export const makeRequest = async ({
         }
     }
     const response = await fetch(apiUrl, options);
-    const data = await response.json();
-    return data;
+    if (response) {
+        const data = await response.json();
+        return data;
+    }
+    return null;
 };
