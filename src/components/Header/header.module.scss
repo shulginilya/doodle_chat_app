@@ -11,4 +11,16 @@
     height: $footer_header_height;
     width: 100%;
     color: $white;
+    &__cnt {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: $max_chat_width;
+        &__username {
+            background-color: $orange;
+            padding: 5px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+    }
 }

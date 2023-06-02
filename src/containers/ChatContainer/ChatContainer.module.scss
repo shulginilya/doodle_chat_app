@@ -8,6 +8,7 @@
     height: 100%;
     width: 100%;
     background-image: url('../../assets/body_bg.png');
+    background-size: cover;
     &__inside {
         width: $fixed_chat_width;
         height: 100%;

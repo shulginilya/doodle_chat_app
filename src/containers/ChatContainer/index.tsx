@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
+import { flushSync } from 'react-dom';
 import MessageSendForm from '@/components/MessageSendForm';
+import Header from '@/components/Header';
 import MessagesBox from '@/components/MessagesBox';
 import { makeRequest } from '@/utils/requestUtil';
-import { generateUniqueUsername } from '@/utils/commonUtils'; 
+import { generateUniqueUsername, getUsername } from '@/utils/commonUtils'; 
 import { commonConfig } from '@/configs/common';
 import { MessageItemType } from '@/types';
 import styles from './ChatContainer.module.scss';
@@ -15,11 +17,32 @@ interface MessageServerItemType extends MessageItemType {
 const ChatContainer: React.FC = () => {
 	const chatWindowRef = useRef<HTMLInputElement>(null);
 	const [localMessageItems, setLocalMessageItems] = useState<MessageItemType[] | []>([]);
+	const scrollToTheBottom = () => {
+		if (chatWindowRef.current) {
+			chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
+		}
+	};
+	/*
+		We detect when user reach the end of the scroll area
+		And we load more messages
+	*/
+	const onScrollHandler = () => {
+		const chatWindow = chatWindowRef.current;
+		if (chatWindow) {
+			if (chatWindow.scrollTop === chatWindow.scrollHeight - chatWindow.clientHeight) {
+				// get the latest timestamp
+				const latestMessage = localMessageItems[localMessageItems.length - 1];
+				if (latestMessage) {
+					getMessagesFromServer(latestMessage.timestamp);
+				}
+			}
+		}
+	};
 	/*
 		Callback after we add a new message
 	*/
 	const onMessageAdd = async (message: string): Promise<void> => {
-		const username = localStorage.getItem('username');
+		const username = getUsername();
 		if (username) {
 			const response = await makeRequest({
 				url: '',
@@ -31,14 +54,11 @@ const ChatContainer: React.FC = () => {
 			});
 			if (response) {
 				const { message, author, timestamp } = response;
-				const freshStateObject = { message, author, timestamp: parseInt(timestamp) };
+				const freshStateObject: MessageItemType = { message, author, timestamp: parseInt(timestamp) };
 				const localMessageItemsCopy = JSON.parse(JSON.stringify(localMessageItems));
 				localMessageItemsCopy.push(freshStateObject);
-				setLocalMessageItems(localMessageItemsCopy);
-				// scroll programmatically to the bottom of the chat
-				if (chatWindowRef.current) {
-					chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
-				}
+				flushSync(() => setLocalMessageItems(localMessageItemsCopy));
+				scrollToTheBottom();
 			}
 		}
 	};
@@ -46,13 +66,13 @@ const ChatContainer: React.FC = () => {
 	/*
 		Get messages from the server
 	*/
-	const getMessagesFromServer = async () => {
+	const getMessagesFromServer = async (startTimestamp: number = commonConfig.startTs) => {
 		const messages = await makeRequest({
-			url: `/?since=${commonConfig.startTs}&limit=${commonConfig.messagesPerPage}`
+			url: `/?since=${startTimestamp}&limit=${commonConfig.messagesPerPage}`
 		});
 		if (messages) {
 			const serverMessages = messages.map(({message, author, timestamp}: MessageServerItemType) => ({ message, author, timestamp }));
-			setLocalMessageItems(serverMessages);
+			setLocalMessageItems(localMessageItemsPrev => localMessageItemsPrev.concat(serverMessages));
 		}
 	};
 
@@ -61,7 +81,7 @@ const ChatContainer: React.FC = () => {
 		/*
 			Generate username and store it in a localStorage , if it is not existed
 		*/
-		if (!localStorage.getItem('username')) {
+		if (!getUsername()) {
 			const uniqueUsername = generateUniqueUsername();
 			localStorage.setItem('username', uniqueUsername);
 		}
@@ -72,10 +92,11 @@ const ChatContainer: React.FC = () => {
 	*/
 	return (
 		<>
+			<Header />
 			<section data-testid="chat_container" className={styles.chat_container}>
-				<div className={styles.chat_container__inside} ref={chatWindowRef}>
+				<div className={styles.chat_container__inside} ref={chatWindowRef} onScroll={onScrollHandler}>
 					{
-						localMessageItems.map((messageData, i) => <MessagesBox key={i} messageData={messageData} />)
+						localMessageItems.map((messageData, i) => <MessagesBox key={i} messageData={messageData} isCurrentUser={messageData.author === getUsername()} />)
 					}
 				</div>
 			</section>

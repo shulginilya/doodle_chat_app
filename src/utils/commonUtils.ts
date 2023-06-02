@@ -16,3 +16,7 @@ export const generateUniqueUsername = (): string => {
     const uniqueUsername = `${prefix}-${randomString}-${timestamp}`;
     return uniqueUsername;
 };
+
+export const getUsername = (): string | null => {
+    return localStorage.getItem('username');
+};
