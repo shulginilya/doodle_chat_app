@@ -22,5 +22,16 @@
             border-radius: 4px;
             font-size: 14px;
         }
+        &__control {
+            &__btn {
+                height: 40px;
+                border: none;
+                border-radius: 4px;
+                width: 60px;
+                background-color: $orange;
+                color: $white;
+                cursor: pointer;
+            }
+        }
     }
 }

@@ -17,6 +17,26 @@ interface MessageServerItemType extends MessageItemType {
 const ChatContainer: React.FC = () => {
 	const chatWindowRef = useRef<HTMLInputElement>(null);
 	const [localMessageItems, setLocalMessageItems] = useState<MessageItemType[] | []>([]);
+	/*
+		Refresh chat history
+	*/
+	const refreshChat = () => {
+		console.log('refresh chat');
+		paginateChat();
+		scrollToTheBottom();
+	};
+	/*
+		Paginate chat history
+	*/
+	const paginateChat = () => {
+		const latestMessage = localMessageItems[localMessageItems.length - 1];
+		if (latestMessage) {
+			getMessagesFromServer(latestMessage.timestamp);
+		}
+	};
+	/*
+		Scroll to the bottom of the chat
+	*/
 	const scrollToTheBottom = () => {
 		if (chatWindowRef.current) {
 			chatWindowRef.current.scrollTop = chatWindowRef.current.scrollHeight;
@@ -30,11 +50,7 @@ const ChatContainer: React.FC = () => {
 		const chatWindow = chatWindowRef.current;
 		if (chatWindow) {
 			if (chatWindow.scrollTop === chatWindow.scrollHeight - chatWindow.clientHeight) {
-				// get the latest timestamp
-				const latestMessage = localMessageItems[localMessageItems.length - 1];
-				if (latestMessage) {
-					getMessagesFromServer(latestMessage.timestamp);
-				}
+				paginateChat();
 			}
 		}
 	};
@@ -62,7 +78,6 @@ const ChatContainer: React.FC = () => {
 			}
 		}
 	};
-
 	/*
 		Get messages from the server
 	*/
@@ -72,10 +87,9 @@ const ChatContainer: React.FC = () => {
 		});
 		if (messages) {
 			const serverMessages = messages.map(({message, author, timestamp}: MessageServerItemType) => ({ message, author, timestamp }));
-			setLocalMessageItems(localMessageItemsPrev => localMessageItemsPrev.concat(serverMessages));
+			flushSync(() => setLocalMessageItems(localMessageItemsPrev => localMessageItemsPrev.concat(serverMessages)));
 		}
 	};
-
 	useEffect(() => {
 		getMessagesFromServer();
 		/*
@@ -86,13 +100,12 @@ const ChatContainer: React.FC = () => {
 			localStorage.setItem('username', uniqueUsername);
 		}
 	}, []);
-
 	/*
 		Render the component
 	*/
 	return (
 		<>
-			<Header />
+			<Header refreshChat={refreshChat} />
 			<section data-testid="chat_container" className={styles.chat_container}>
 				<div className={styles.chat_container__inside} ref={chatWindowRef} onScroll={onScrollHandler}>
 					{
