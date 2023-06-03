@@ -1,6 +1,5 @@
 {
-	"private": true,
-	"name": "aviv-owner-technical-test-front-end",
+	"name": "doodle_chat_app",
 	"scripts": {
 		"dev": "vite",
 		"build": "tsc && vite build",

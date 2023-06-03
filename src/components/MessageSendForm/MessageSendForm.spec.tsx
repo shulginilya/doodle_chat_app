@@ -4,8 +4,9 @@ import user from '@testing-library/user-event';
 import MessageSendForm from './index';
 
 describe('<MessageSendForm /> test suite', () => {
+    const mock = jest.fn();
     beforeEach(() => {
-        render(<MessageSendForm onMessageAdd={() => {}} />);
+        render(<MessageSendForm onMessageAdd={mock} />);
     });
 
     it('Should render the <MessageSendForm /> component, and it must be visible', () => {
@@ -20,21 +21,16 @@ describe('<MessageSendForm /> test suite', () => {
         expect(formSubmitBtn).toBeInTheDocument();
     });
 
-    // it('make sure that form submitted correctly', () => {
-    //     const argList: any = [];
-    //     const callback = (...args: any) => {
-    //         argList.push(args);
-    //     } 
-    //     render(<MessageSendForm onMessageAdd={callback} />);
-    //     const formTextInput = screen.getByTestId('message_form_text_input');
-    //     const formSubmitBtn = screen.getByTestId('message_form_submit_btn');
-    //     // we click on text input to get it a focus
-    //     user.click(formTextInput);
-    //     // we simulate typing
-    //     user.keyboard('UnitTestUser');
-    //     // we simulate clicking 'Enter' button
-    //     user.click(formSubmitBtn);
-    //     expect(argList).toHaveLength(1);
-    // });
+    it('make sure that form submitted correctly', () => {
+        const formTextInput = screen.getByTestId('message_form_text_input');
+        const formSubmitBtn = screen.getByTestId('message_form_submit_btn');
+        // we click on text input to get it a focus
+        user.click(formTextInput);
+        // we simulate typing
+        user.keyboard('UnitTestUser');
+        // we simulate clicking 'Enter' button
+        user.click(formSubmitBtn);
+        expect(mock).toHaveBeenCalledTimes(1);
+    });
 
 });
